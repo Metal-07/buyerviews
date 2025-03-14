@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - BuyerViews{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-8 mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to BuyerViews</h1>
+    <p class="text-gray-600 text-lg">Discover the best products across various categories, with trusted reviews and recommendations.</p>
+</div>
+
+{% if search_query %}
+<div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">Search Results for "{{ search_query }}"</h2>
+    {% if products %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in products %}
+        <div class="bg-white shadow rounded-lg overflow-hidden transition-transform hover:-translate-y-1">
+            {% if product.image_url %}
+            <div class="h-64 flex items-center justify-center bg-white p-4">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" class="max-h-full max-w-full object-contain">
+            </div>
+            {% else %}
+            <div class="h-64 bg-gray-200 flex items-center justify-center">
+                <i class="fas fa-image text-gray-400 text-4xl"></i>
+            </div>
+            {% endif %}
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ product.name }}</h3>
+                <div class="flex items-center mb-2">
+                    {% if product.rating %}
+                    <div class="flex items-center">
+                        <span class="text-yellow-400">★</span>
+                        <span class="ml-1 text-gray-600">{{ product.rating }}</span>
+                        {% if product.reviews %}
+                        <span class="ml-2 text-gray-500">({{ product.reviews }} reviews)</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <p class="text-gray-600 mb-4">{{ product.short_description }}</p>
+                {% if product.pros or product.cons %}
+                <div class="mb-4">
+                    {% if product.pros %}
+                    <div class="mb-2">
+                        <h4 class="text-sm font-semibold text-green-600">Pros:</h4>
+                        <p class="text-sm text-gray-600">{{ product.pros }}</p>
+                    </div>
+                    {% endif %}
+                    {% if product.cons %}
+                    <div>
+                        <h4 class="text-sm font-semibold text-red-600">Cons:</h4>
+                        <p class="text-sm text-gray-600">{{ product.cons }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold text-gray-900">{{ product.price }}</span>
+                    {% if product.affiliate_link %}
+                    <a href="{{ product.affiliate_link }}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        <span>View on Amazon</span>
+                        <i class="fas fa-external-link-alt ml-2"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-600">No products found matching your search.</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Browse Categories</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for category in categories %}
+        <a href="{% url 'products:category_detail' category.slug %}" 
+           class="group bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600">{{ category.name }}</h3>
+                    <span class="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
+                        <span class="text-sm font-medium text-blue-600">{{ category.get_product_count }}</span>
+                    </span>
+                </div>
+                {% if category.description %}
+                <p class="text-sm text-gray-600 mb-3">{{ category.description }}</p>
+                {% endif %}
+                <div class="flex items-center text-blue-600 group-hover:text-blue-700">
+                    <span class="text-sm font-medium">Browse Products</span>
+                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% if products %}
+<div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Products</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in products %}
+        <div class="bg-white shadow rounded-lg overflow-hidden transition-transform hover:-translate-y-1">
+            {% if product.image_url %}
+            <div class="h-64 flex items-center justify-center bg-white p-4">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" class="max-h-full max-w-full object-contain">
+            </div>
+            {% else %}
+            <div class="h-64 bg-gray-200 flex items-center justify-center">
+                <i class="fas fa-image text-gray-400 text-4xl"></i>
+            </div>
+            {% endif %}
+            <div class="p-6">
+                <div class="flex items-center mb-2">
+                    <span class="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">{{ product.category.name }}</span>
+                    {% if product.rating %}
+                    <div class="flex items-center ml-2">
+                        <span class="text-yellow-400">★</span>
+                        <span class="ml-1 text-gray-600">{{ product.rating }}</span>
+                        {% if product.reviews %}
+                        <span class="ml-2 text-gray-500">({{ product.reviews }} reviews)</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ product.name }}</h3>
+                <p class="text-gray-600 mb-4">{{ product.short_description }}</p>
+                {% if product.pros or product.cons %}
+                <div class="mb-4">
+                    {% if product.pros %}
+                    <div class="mb-2">
+                        <h4 class="text-sm font-semibold text-green-600">Pros:</h4>
+                        <p class="text-sm text-gray-600">{{ product.pros }}</p>
+                    </div>
+                    {% endif %}
+                    {% if product.cons %}
+                    <div>
+                        <h4 class="text-sm font-semibold text-red-600">Cons:</h4>
+                        <p class="text-sm text-gray-600">{{ product.cons }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold text-gray-900">{{ product.price }}</span>
+                    {% if product.affiliate_link %}
+                    <a href="{{ product.affiliate_link }}" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        <span>View on Amazon</span>
+                        <i class="fas fa-external-link-alt ml-2"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %} 

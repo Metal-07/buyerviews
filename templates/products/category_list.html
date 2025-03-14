@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories - BuyerViews{% endblock %}
+
+{% block content %}
+<div class="grid">
+    {% for category in categories %}
+    <div class="card animate__animated animate__fadeIn">
+        <div class="card-content">
+            <h2 class="card-title">{{ category.name }}</h2>
+            <p class="card-text">Explore our {{ category.name }} collection</p>
+            <a href="{% url 'products:category_detail' category.slug %}" class="btn">View Products</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 
