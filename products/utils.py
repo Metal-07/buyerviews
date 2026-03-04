@@ -9,7 +9,7 @@ from .models import Category, Product
 logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-SPREADSHEET_ID = '1vtHV9NjRLY7lvrbYWn-Ll6ADacNb1YmHl11A5-IFb54'
+SPREADSHEET_ID = '1cUkMqUdiF-mRmC58XOx9kTKDmXDSFieiA4OU_imUw0g'
 RANGE_NAME = 'Sheet1!A2:L'  # Extending range to include more columns
 SERVICE_ACCOUNT_FILE = 'service-account.json'
 
